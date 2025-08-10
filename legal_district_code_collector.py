@@ -4,11 +4,12 @@ from pydoc import locate
 import requests
 import pandas as pd
 
-from db_utils import upsert_post
+from db_utils import upsert_region_code
 
 # 기본 설정
+from env import service_key
+
 base_url = "http://apis.data.go.kr/1741000/StanReginCd/getStanReginCdList"
-service_key = "gqgCiTBY%2FOzh3gKUuVZHqIiL1tYT0oRma1NwX6frkysuY%2FEgLn4nSgRWDqGMM8YbTslnVrSfmE3D7n4iapQ%2BqQ%3D%3D"
 page = 1
 num_rows = 1000
 
@@ -53,7 +54,7 @@ while True:
                 except ValueError:
                     pass
             print(f"{parsed}")
-            upsert_post(parsed)
+            upsert_region_code(parsed)
     except Exception as e:
         print(f"exception: {e}")
         break

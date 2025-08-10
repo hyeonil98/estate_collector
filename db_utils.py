@@ -4,15 +4,15 @@ from typing import List
 from sqlalchemy import create_engine, inspect, or_, and_, select
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
-from typing_extensions import Any
 
+from env import *
 from models import Base, RegionCode, RealEstateDeal
 
 
 def initialize_engine(echo=False, create_schema=False):
     # 아이디 비밀번호 secret 으로 설정
     engine = create_engine(
-        "mysql+pymysql://:@database-1.cleosac8ya6g.ap-northeast-2.rds.amazonaws.com:3306/estatedb?charset=utf8mb4",
+        f"mysql+pymysql://{user_id}:{user_pw}@{server_address}/{db_name}?charset=utf8mb4",
         echo=echo,
         pool_size=5,
         max_overflow=2,
@@ -70,7 +70,7 @@ def fetch_filtered_table_data_with_like_multi_like(
     finally:
         session.close()
 
-def upsert_post(data):
+def upsert_region_code(data):
     stmt = insert(RegionCode).values(**data)
     update_stmt = stmt.on_duplicate_key_update(
         sido_cd=stmt.inserted.sido_cd,
